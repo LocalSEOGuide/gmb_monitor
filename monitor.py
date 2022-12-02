@@ -89,8 +89,8 @@ class GmbLocation:
         self.saveToFile()
 
     def readFile(self): 
-        if os.path.exists('sample.json'):
-            with open('sample.json', 'r') as openfile:
+        if os.path.exists('output.json'):
+            with open('output.json', 'r') as openfile:
                 return json.load(openfile)
         else:
             return []
