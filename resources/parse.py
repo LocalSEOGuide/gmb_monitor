@@ -33,22 +33,16 @@ class ScrapeParser:
 
         # image:
         res['image'] = dom.xpath('//g-img[@class="ZGomKf"]/img/@src')
-        #-------------------------------------------------------
         # business_name
         res['business_name'] = dom.xpath('//div[@class="fYOrjf kp-hc"]//h2/span/text()')[0]
-        #-------------------------------------------------------
         # address
         res['address'] = dom.xpath('//div[@class="UDZeY OTFaAf"]//div[@class="QsDR1c"]//span[@class="LrzXr"]')[0].text
-        #-------------------------------------------------------
         # category_snippet
         res['category_snippet'] = dom.xpath('//span[@class="YhemCb"]')[0].text
-        #------------------------------------------------------- 
         # website
         res['website'] = dom.xpath('//a[@class="ab_button"]/@href')[0]
-        #-------------------------------------------------------
         # phone_number
         res['phone_number'] = soup.find( "span" , class_='LrzXr zdqRlf kno-fv').text 
-        #-------------------------------------------------------
         # departments
         res['departments'] = soup.find( "span" , class_='ZcbhQc').text
 
