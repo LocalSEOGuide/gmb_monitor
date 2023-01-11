@@ -12,9 +12,8 @@ class ScrapeParser:
         }
         return
 
+    
     def parse(self, business_name, parse_type='local_google_kp'):
-        
-
         self.job_settings['parse_type'] = parse_type  # <--- temp until other parsers are implemented
         if self.job_settings['parse_type'] == 'local_google_kp':
 
