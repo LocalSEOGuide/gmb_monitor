@@ -1,9 +1,9 @@
 # currently only supports processing KP results from Google.
 
-class ScrapeParser(html_text_content=None, parse_type=None):
+class ScrapeParser:
     parse_types = ['local_google_kp']
 
-    def __init__(self):
+    def __init__(self,html_text_content=None, parse_type=None):
         import lxml
 
         self.job_settings = {
@@ -12,39 +12,44 @@ class ScrapeParser(html_text_content=None, parse_type=None):
         }
         return
 
-    def parse(self, parse_type='local_google_kp'):
+    def parse(self, business_name, parse_type='local_google_kp'):
+        
 
         self.job_settings['parse_type'] = parse_type  # <--- temp until other parsers are implemented
-
         if self.job_settings['parse_type'] == 'local_google_kp':
 
-            ### XPATHs for Desktop Local Business KP
-            element_xpaths = {
-                'image_url': '//g-img[@class="ZGomKf"]/img/@src',
-                'business_name': '//div[@class="fYOrjf kp-hc"]//h2/span/text()',
-                'address': '//div[@class="UDZeY OTFaAf"]//div[@class="QsDR1c"]//span[@class="LrzXr"]',
-                'category_snippet': '//span[@class="YhemCb"]',
-                'website': '//a[@class="ab_button"]/@href',
-                'phone_number': '//div[@class="UDZeY OTFaAf"]//div[@class="QsDR1c"]//a[@data-dtype]',
-                'departments': '//div[@data-hveid="CNkBEAA"]/div/span[2]'
-             }
+        headers = {
+            "User-Agent":
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36"
+        }
 
-        # process the tree content
-        tree = ScrapeParser.create_html_tree(self.job_settings['content'])
-        extract_output = {}
+        page = requests.get(
+            'https://google.com/search?q=' + business_name,
+            headers=headers)
+        soup = BeautifulSoup(page.content, "html.parser")
+        time.sleep(7)
+        dom = etree.HTML(str(soup))
+        res = {} 
 
-        for k, v in element_xpaths:
-            extract_output[k] = get_xpath_item_from_tree(tree, v)
+        # image:
+        res['image'] = dom.xpath('//g-img[@class="ZGomKf"]/img/@src')
+        #-------------------------------------------------------
+        # business_name
+        res['business_name'] = dom.xpath('//div[@class="fYOrjf kp-hc"]//h2/span/text()')[0]
+        #-------------------------------------------------------
+        # address
+        res['address'] = dom.xpath('//div[@class="UDZeY OTFaAf"]//div[@class="QsDR1c"]//span[@class="LrzXr"]')[0].text
+        #-------------------------------------------------------
+        # category_snippet
+        res['category_snippet'] = dom.xpath('//span[@class="YhemCb"]')[0].text
+        #------------------------------------------------------- 
+        # website
+        res['website'] = dom.xpath('//a[@class="ab_button"]/@href')[0]
+        #-------------------------------------------------------
+        # phone_number
+        res['phone_number'] = soup.find( "span" , class_='LrzXr zdqRlf kno-fv').text 
+        #-------------------------------------------------------
+        # departments
+        res['departments'] = soup.find( "span" , class_='ZcbhQc').text
 
-        return extract_output
-
-    @staticmethod
-    def create_html_tree(html_text_content):
-        # simply takes text and turns it into an HTML tree we can xpath against
-        from lxml import etree
-        return etree.parse(html_text_content)
-
-    @staticmethod
-    def get_xpath_item_from_tree(html_tree, xpath):
-        # takes soup and xpath and returns the value(s)
-        return html_tree.xpath(xpath)
+        return res 
