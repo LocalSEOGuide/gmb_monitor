@@ -1,19 +1,17 @@
+import os
+import json
 class GmbLocation: 
 
-    def __init__(self,locationList):
+    def __init__(self):
         
-        self.output = self.readFile() # scan json file from local machine
+        self.output = []
         self.index = len(self.output)
-        self.input = locationList 
+
 
     # function to add location inputs. 
-    def addLocation(self): 
-
-        for i in range(len(self.input)):
-            temp = {} 
-            temp['brand_query'] = self.input[i]['brand_term']
-            temp['group_id'] = self.index + 1 
-            self.output.append(temp) 
+    def addLocation(self,locationList): 
+        self.remove()
+        self.output.append(locationList) 
         self.saveToFile() # save input as json file to local machine 
 
     # function to scan json file from local machine and return contents 
@@ -30,3 +28,8 @@ class GmbLocation:
         with open("output.json", "w") as outfile:
             json.dump(self.output, outfile)
         print("Save output to file!")
+
+    # function to remove content from file
+    def remove(self): 
+        self.output = []
+        self.saveToFile() # save input as json file to local machine 
