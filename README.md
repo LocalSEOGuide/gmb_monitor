@@ -11,6 +11,8 @@ Now we use a local object to store data for all business name. Therefore, there 
 
 #### Update Function 
 
+We first need to initiate the GmbLocation class in order to read the local dataset and pass it to the updateLocalObject function.
+
 ```sh
 g = gmbL.GmbLocation()
 local_obj = g.readFile() 
