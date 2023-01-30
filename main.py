@@ -93,7 +93,6 @@ def updateLocalObject(name, local_obj):
 
     timeStamp = date.today().isoformat()
     # lastVisited = local_obj['business_name'][name]['timeVisited'][-1]
-
     res = parse(timeStamp,name)
 
     if not res:
@@ -108,7 +107,6 @@ def updateLocalObject(name, local_obj):
 
     local_obj['business_name'][name]['timeVisited'].add(timeStamp)
     local_obj['business_name'][name]['content'][timeStamp] = res
-    # print(local_obj)
 
     # if this business name was visited before, then starting to compare with the current visit one
     if len(local_obj['business_name'][name]['timeVisited']) > 0 and next(iter(local_obj['business_name'][name]['timeVisited'])) != timeStamp:
