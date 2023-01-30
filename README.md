@@ -9,7 +9,7 @@ This is a project to maintaint a record for changes from knowledge panel on goog
 
 Now we use a local object to store data for all business name. Therefore, there will be a file named output.json which contains the local dataset for all business name that are visited. 
 
-All major functions are in main.py. 
+There are python files - main.py and gmbLocation.py. Moreover, all major functions are in main.py and the gmbLocation.py only contains the GmbLocation class for parsing and saving data from/to local dataset.
 
 #### Update Function 
 
