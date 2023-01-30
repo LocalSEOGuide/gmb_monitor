@@ -10,7 +10,8 @@ import os
 import pandas as pd
 
 # function to search for history 
-def findLast30Days(local_obj,name, num): 
+# toDO: fix name of num
+def findLast30Days(local_obj,name, numOfDay): 
     # inner function
     def setDict(url='', address='', business_name='', category_snippet='', departments='', image='', phone_number='', current_visit_time='', website='', changes='', lastVisited=''):
         out_dict = {
@@ -91,38 +92,50 @@ def updateLocalObject(name, local_obj):
         }
 
     timeStamp = date.today().isoformat()
-    lastVisited = local_obj['business_name'][name]['timeVisited'][-1]
+    # lastVisited = local_obj['business_name'][name]['timeVisited'][-1]
 
     res = parse(timeStamp,name)
+
+    if not res:
+        return local_obj
+    
     if name not in local_obj['business_name']:
         local_obj['business_name'][name] = {} 
         local_obj['business_name'][name]['google_serp_url'] = res['google_serp_url'] 
+        local_obj['business_name'][name]['timeVisited'] = set()
+        local_obj['business_name'][name]['content'] = {}
+        local_obj['business_name'][name]['changeSinceLastVisited'] = {}
 
-    local_obj['business_name'][name]['timeVisited'].append(timeStamp)
+    local_obj['business_name'][name]['timeVisited'].add(timeStamp)
     local_obj['business_name'][name]['content'][timeStamp] = res
+    # print(local_obj)
 
-    # find content from last visited 
-    content_from_lastVisited = local_obj['business_name'][name]['content'][lastVisited] 
-    local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp] = generate_change_attribute() 
-    local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp]['google_serp_url'] = res['google_serp_url']
-    changes = local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp]
+    # if this business name was visited before, then starting to compare with the current visit one
+    if len(local_obj['business_name'][name]['timeVisited']) > 0 and next(iter(local_obj['business_name'][name]['timeVisited'])) != timeStamp:
 
-    # start comparing current content and last visited content 
-    for element in res: 
-        if res[element] != content_from_lastVisited[element] and element != 'time':
-            ele = element + '_changes'
-            changes[ele] += 1 
+        # find content from last visited 
+        lastVisited = next(iter(local_obj['business_name'][name]['timeVisited']))
+        content_from_lastVisited = local_obj['business_name'][name]['content'][lastVisited] 
+        local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp] = generate_change_attribute() 
+        local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp]['google_serp_url'] = res['google_serp_url']
+        changes = local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp]
 
-    # Update last visited date to today
-    local_obj['business_name'][name]['timeVisited'][0] = timeStamp
-    changes['lastVisitedDate'] = lastVisited
-    local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp] = changes
-    g.addLocation(local_obj)
+        # start comparing current content and last visited content 
+        for element in res: 
+            if res[element] != content_from_lastVisited[element] and element != 'time':
+                ele = element + '_changes'
+                changes[ele] += 1 
 
-    return changes
+        # Update last visited date to today
+        local_obj['business_name'][name]['timeVisited'][0] = timeStamp
+        changes['lastVisitedDate'] = lastVisited
+        local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp] = changes
+
+    return local_obj
 
 # parse key components from google search result and return a dictionary 
-def parse(timeStamp,business_name, parse_type='local_google_kp'):
+def parse(timeStamp,business_name):
+
 
     headers = {
         "User-Agent":
@@ -141,6 +154,7 @@ def parse(timeStamp,business_name, parse_type='local_google_kp'):
     res['google_serp_url'] = 'https://google.com/search?q=' + business_name
     # Time: 
     res['time'] = timeStamp
+
     # image:
     res['image'] = dom.xpath('//g-img[@class="ZGomKf"]/img/@src')
     # business_name
@@ -156,16 +170,9 @@ def parse(timeStamp,business_name, parse_type='local_google_kp'):
     # departments
     res['departments'] = soup.find( "span" , class_='ZcbhQc').text
 
-    return res 
+    return res
 
 
 
-g = gmbL.GmbLocation()
-local_obj = g.readFile() 
-# print(local_obj[0]['business_name']['Audi Bellevue']['content'])
 
-# pp.pprint(updateLocalObject('Audi Bellevue', local_obj[0]))
-# local_obj = g.readFile() 
-# pp.pprint(local_obj[0])
-findLast30Days(local_obj[0],'Audi Bellevue',1095)
 
