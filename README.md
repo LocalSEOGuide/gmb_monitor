@@ -21,7 +21,7 @@ updateLocalObject('BMW of Las Vegas', local_obj[0])
 #### Parse Function
 
 ```sh
-parse('2023-01-28', 'BMW of Las Vegas') 
+parse('2023-01-29', 'BMW of Las Vegas') 
 
 ```
 
