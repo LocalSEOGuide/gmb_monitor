@@ -9,8 +9,9 @@ import gmbLocation as gmbL
 import os
 import pandas as pd
 
-# function to search for history 
-def findLast30Days(local_obj,name, num): 
+# function to search for history of a sepecific location name
+# num is the days of history for this location in local dataset. For example: 30 days from today.
+def findLocationHistory(local_obj,name, num): 
     # inner function
     def setDict(url='', address='', business_name='', category_snippet='', departments='', image='', phone_number='', current_visit_time='', website='', changes='', lastVisited=''):
         out_dict = {
@@ -133,7 +134,7 @@ def updateLocalObject(name, local_obj):
                 changes[ele] += 1 
 
     # Update last visited date to today
-    
+
     changes['lastVisitedDate'] = lastVisited
     local_obj['business_name'][name]['changeSinceLastVisited'][timeStamp] = changes
 
