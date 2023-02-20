@@ -61,7 +61,7 @@ The parse function will return an obj that contains google_serp_url,time, image,
  'website': 'https://www.bmwvegas.com/?utm_source=local&utm_medium=organic&utm_campaign=*000012247*GMB'}
 ```
 
-#### View Function 
+#### View Function / Regular Check for a sepecific location
 
 ```sh
 findLast30Days(local_obj, 'BMW of Las Vegas', 30)
