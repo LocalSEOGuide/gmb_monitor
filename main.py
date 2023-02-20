@@ -9,6 +9,8 @@ import gmbLocation as gmbL
 import os
 import pandas as pd
 
+
+
 # function to search for history of a sepecific location name
 # num is the days of history for this location in local dataset. For example: 30 days from today.
 def findLocationHistory(local_obj,name, num): 
@@ -178,7 +180,5 @@ def parse(timeStamp,business_name):
     res['departments'] = soup.find( "span" , class_='ZcbhQc').text
 
     return res
-
-
 
 
