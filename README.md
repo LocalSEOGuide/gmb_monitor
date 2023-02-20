@@ -19,9 +19,7 @@ Locations are defined by a 'query' that will populate a Knowledge Graph of a bus
 usually branded like `ACME Industries LLC Oakland CA` or `ACME Ind Oakland`. Situations can arise where a *location* not 
 popping a KG is the symptom of a GMB/GBP listing issue.
 
-#### ! Adding Locations !
-
-#### Update Function
+#### Adding Locations
 We first need to initiate the GmbLocation class in order to read the local dataset and pass it to the `updateLocalObject` 
 function.
 
@@ -31,7 +29,8 @@ from main import updateLocalObject
 
 g = gmbL.GmbLocation()
 local_obj = g.readFile() 
-updateLocalObject('BMW of Las Vegas', local_obj[0])
+local_obj = updateLocalObject('BMW of Las Vegas', local_obj) # this function will return the new local_obj
+g.addLocation(local_obj) # this step is to save an updated local obj as the new local dataset.
 ```
 
 #### Parse Function
@@ -70,9 +69,4 @@ findLast30Days(local_obj, 'BMW of Las Vegas', 30)
 
 This function can look up information of the business name for the last 30 days. In addition, it can be any number. For 
 example, it can be pulled out information for the last 2000 days of the business name. 
-
-!TODO: touch on testing the BS4 setup, to make sure they can get a page
-!TODO: Adding a business/location to be checked
-!TODO: How the regular checking works (shell script/ec2/etc, doesn't need to be detailed)
-!TODO: Summary feature, we need something that will summarize changes over time by a location/business, eg: BMW of Las Vegas had 6 image changes in the last 30 days, BMW of Austin had 1 image change and a category change
 
