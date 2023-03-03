@@ -10,7 +10,6 @@ import os
 import pandas as pd
 
 
-
 # function to search for history of a sepecific location name
 # num is the days of history for this location in local dataset. For example: 30 days from today.
 def findLocationHistory(local_obj,name, num): 
@@ -85,18 +84,18 @@ def updateLocalObject(name, local_obj):
     def generate_change_attribute():
         return {
                     'google_serp_url': '', 
-                    'address_changes'  :  0, 
+                    'address_changes':  0,
                     'business_name_changes': 0,
-                    'category_snippet_changes' :0,
+                    'category_snippet_changes': 0,
                     'departments_changes': 0, 
                     'image_changes': 0,
                     'phone_number_changes': 0,
                     'website_changes': 0,
-                    'lastVisitedDate':'',
+                    'lastVisitedDate': '',
         }
 
     timeStamp = date.today().isoformat()
-    res = parse(timeStamp,name) 
+    res = parse(timeStamp, name)
 
     if not res:
         return local_obj
@@ -142,9 +141,9 @@ def updateLocalObject(name, local_obj):
 
     return local_obj
 
-# parse key components from google search result and return a dictionary 
-def parse(timeStamp,business_name):
 
+# parse key components from google search result and return a dictionary 
+def parse(timeStamp, business_name):
 
     headers = {
         "User-Agent":
@@ -175,10 +174,16 @@ def parse(timeStamp,business_name):
     # website
     res['website'] = dom.xpath('//a[@class="ab_button"]/@href')[0]
     # phone_number
-    res['phone_number'] = soup.find( "span" , class_='LrzXr zdqRlf kno-fv').text 
+    res['phone_number'] = soup.find("span", class_='LrzXr zdqRlf kno-fv').text
     # departments
-    res['departments'] = soup.find( "span" , class_='ZcbhQc').text
+    try:
+        res['departments'] = soup.find("span", class_='ZcbhQc').text
+
+    except AttributeError:
+        print("Unable to find a department for this record: {}".format(business_name))
+        res['departments'] = None
 
     return res
 
-
+# TODO: Add error handling for the scrape components; return None when not found.
+# TODO: Add features to help end user [handling multiple location setups, internal checking of existing location tracking]

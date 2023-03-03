@@ -15,7 +15,7 @@ class for parsing and saving data from/to local dataset in `gmbLocation.py`
 
 
 ## Working With "Locations"
-Locations are defined by a 'query' that will populate a Knowledge Graph of a busines/location.  Examples of these are 
+Locations are defined by a 'query' that will populate a Knowledge Graph of a business/location.  Examples of these are 
 usually branded like `ACME Industries LLC Oakland CA` or `ACME Ind Oakland`. Situations can arise where a *location* not 
 popping a KG is the symptom of a GMB/GBP listing issue.
 
@@ -39,7 +39,8 @@ g.addLocation(local_obj) # this step is to save an updated local obj as the new 
 parse('2023-01-29', 'BMW of Las Vegas') 
 ```
 
-The parse function will return an obj that contains google_serp_url,time, image, business_name, address, category_snippet, website,phone_number, and departments. For example, 
+The parse function will return an obj that contains `google_serp_url`, `time`, `image`, `business_name`, `address`, 
+`category_snippet`, `website,phone_number`, and `departments`. For example:
 
 ```sh
 
@@ -61,7 +62,7 @@ The parse function will return an obj that contains google_serp_url,time, image,
  'website': 'https://www.bmwvegas.com/?utm_source=local&utm_medium=organic&utm_campaign=*000012247*GMB'}
 ```
 
-#### View Function / Regular Check for a sepecific location
+#### View Function / Regular Check for a specific location
 
 ```sh
 findLast30Days(local_obj, 'BMW of Las Vegas', 30)
