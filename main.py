@@ -8,7 +8,7 @@ import pprint as pp
 import gmbLocation as gmbL
 import os
 import pandas as pd
-
+import sys
 
 # function to search for history of a sepecific location name
 # num is the days of history for this location in local dataset. For example: 30 days from today.
@@ -156,7 +156,7 @@ def parse(timeStamp, business_name):
     soup = BeautifulSoup(page.content, "html.parser")
     time.sleep(7)
     dom = etree.HTML(str(soup))
-    res = {} 
+    res = {}
 
     # Google:
     res['google_serp_url'] = 'https://google.com/search?q=' + business_name
@@ -164,26 +164,52 @@ def parse(timeStamp, business_name):
     res['time'] = timeStamp
 
     # image:
-    res['image'] = dom.xpath('//g-img[@class="ZGomKf"]/img/@src')
+    try:
+        
+        res['image'] = dom.xpath('//g-img[@class="ZGomKf"]/img/@src')
+    except Exception as e:
+        print("Unable to find image for this record: {}".format(business_name))
+        res['image'] = None 
+
     # business_name
-    res['business_name'] = dom.xpath('//div[@class="fYOrjf kp-hc"]//h2/span/text()')[0]
+    try:
+        res['business_name'] = dom.xpath('//div[@class="fYOrjf kp-hc"]//h2/span/text()')[0]
+    except Exception as e:
+        print("Unable to find business name for this record: {}".format(business_name))
+        res['image'] = None
+
     # address
-    res['address'] = dom.xpath('//div[@class="UDZeY OTFaAf"]//div[@class="QsDR1c"]//span[@class="LrzXr"]')[0].text
+    try:
+        res['address'] = dom.xpath('//div[@class="UDZeY OTFaAf"]//div[@class="QsDR1c"]//span[@class="LrzXr"]')[0].text
+    except Exception as e:
+        print("Unable to find address for this record: {}".format(business_name))
+        res['address'] = None 
+
     # category_snippet
-    res['category_snippet'] = dom.xpath('//span[@class="YhemCb"]')[0].text
+    try:  
+        res['category_snippet'] = dom.xpath('//span[@class="YhemCb"]')[0].text
+    except Exception as e:
+        print("Unable to find category_snippet for this record: {}".format(business_name))
+        res['category_snippet'] = None 
+
     # website
-    res['website'] = dom.xpath('//a[@class="ab_button"]/@href')[0]
+    try:
+        res['website'] = dom.xpath('//a[@class="ab_button"]/@href')[0]
+    except Exception as e:
+        print("Unable to find website for this record: {}".format(business_name))
+        res['website'] = None 
+
     # phone_number
-    res['phone_number'] = soup.find("span", class_='LrzXr zdqRlf kno-fv').text
+    try:    
+        res['phone_number'] = soup.find("span", class_='LrzXr zdqRlf kno-fv').text
+    except Exception as e:
+        print("Unable to find phone_number for this record: {}".format(business_name))
+        res['phone_number'] = None
+
     # departments
     try:
         res['departments'] = soup.find("span", class_='ZcbhQc').text
-
-    except AttributeError:
-        print("Unable to find a department for this record: {}".format(business_name))
+    except Exception as e:
+        print("Unable to find departments for this record: {}".format(business_name))
         res['departments'] = None
-
     return res
-
-# TODO: Add error handling for the scrape components; return None when not found.
-# TODO: Add features to help end user [handling multiple location setups, internal checking of existing location tracking]
