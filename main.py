@@ -75,7 +75,13 @@ def findLocationHistory(local_obj,name, num):
     df = pd.DataFrame(alist)
     df.to_csv(name + '_history.csv')
 
-
+# function to update local dataset with a list of business name
+def updateLocations(nameList, local_obj):
+    if not nameList:
+        return local_obj
+    for name in nameList:
+        local_obj = updateLocalObject(name, local_obj)
+    return local_obj
 
 # function to update local dataset and return changes 
 def updateLocalObject(name, local_obj):
