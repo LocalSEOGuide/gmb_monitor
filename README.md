@@ -29,7 +29,7 @@ from main import updateLocalObject
 
 g = gmbL.GmbLocation()
 local_obj = g.readFile() 
-local_obj = updateLocalObject('BMW of Las Vegas', local_obj) # this function will return the new local_obj
+local_obj = updateLocations(['BMW of Las Vegas','AUDI North Austin'], local_obj) # this function will return the new local_obj
 g.addLocation(local_obj) # this step is to save an updated local obj as the new local dataset.
 ```
 
