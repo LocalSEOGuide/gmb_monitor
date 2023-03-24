@@ -13,6 +13,30 @@ queries.
 There are two python files - `main.py` and `gmbLocation.py`.  All major functions are in `main.py` with the GmbLocation 
 class for parsing and saving data from/to local dataset in `gmbLocation.py`
 
+### Set up 
+
+#### Local Object 
+The local object is empty if user never saves anything. To access it, pleas import gmbLocation and use the readFile function to access the local object.
+
+```sh
+import gmbLocation as gmbL
+
+g = gmbL.GmbLocation()
+local_obj = g.readFile() 
+``` 
+**_Note:_**  If the local object is empty, the readFile function will return an empty list. 
+
+After you save everything to the local object, please use addLocation function to save it. For example, 
+
+```sh
+import gmbLocation as gmbL
+
+g = gmbL.GmbLocation()
+local_obj = g.readFile() 
+g.addLocation(local_obj) 
+```
+
+
 
 ## Working With "Locations"
 Locations are defined by a 'query' that will populate a Knowledge Graph of a business/location.  Examples of these are 
