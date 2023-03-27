@@ -36,7 +36,15 @@ local_obj = g.readFile()
 g.addLocation(local_obj) 
 ```
 
+#### Checking Location Status in Local Dataset 
 
+Use findLocation function to keep track a list of locations. It will return a list of csv files for the locations. 
+
+```sh
+
+findLocation(local_obj,['BMW of Las Vegas','AUDI North Austin'])
+```
+In addition, each csv file contains the last 30 days of changes for the specific location. 
 
 ## Working With "Locations"
 Locations are defined by a 'query' that will populate a Knowledge Graph of a business/location.  Examples of these are 
