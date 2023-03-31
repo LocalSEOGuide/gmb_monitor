@@ -5,6 +5,9 @@ This is a project to maintain a record for changes from Google's Knowledge Panel
 `BeautifulSoup`, and `lxml`. Moreover, there will be explanation here for those functions to update, view, or parse 
 queries.  
 
+
+**_Note:_** The kg_img_monitor repo has been changed to gmb_monitor.
+
 ### Usage
 
 **_Note:_** We now use a local object to store data for all business name. Therefore, there will be a file named 
